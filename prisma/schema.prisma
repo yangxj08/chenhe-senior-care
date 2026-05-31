@@ -1,0 +1,236 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  code        String   @unique
+  address     String?
+  phone       String?
+  plan        String   @default("BASIC")
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  users       User[]
+  elders      Elder[]
+  careRecords CareRecord[]
+  billings    BillingRecord[]
+  staff       StaffMember[]
+  investments Investment[]
+  suppliers   Supplier[]
+  purchaseOrders PurchaseOrder[]
+  customers   Customer[]
+}
+
+model User {
+  id             String        @id @default(cuid())
+  email          String        @unique
+  password       String
+  name           String
+  phone          String?
+  role           String        @default("ORG_ADMIN")
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime      @default(now())
+  careRecords    CareRecord[]
+  staffProfile   StaffMember?
+  investments    Investment[]
+  elderFamily    Elder[]       @relation("FamilyUser")
+  sentMessages   Message[]     @relation("SentMessages")
+  receivedMessages Message[]   @relation("ReceivedMessages")
+  notifications  Notification[]
+}
+
+model Elder {
+  id               String         @id @default(cuid())
+  name             String
+  gender           String
+  age              Int
+  idCard           String?
+  phone            String?
+  emergencyContact String?
+  emergencyPhone   String?
+  careLevel        String         @default("A")
+  roomNumber       String?
+  bedNumber        String?
+  admissionDate    DateTime       @default(now())
+  status           String         @default("ACTIVE")
+  notes            String?
+  organizationId   String
+  organization     Organization   @relation(fields: [organizationId], references: [id])
+  familyUserId     String?
+  familyUser       User?          @relation("FamilyUser", fields: [familyUserId], references: [id])
+  careRecords      CareRecord[]
+  billings         BillingRecord[]
+}
+
+model CareRecord {
+  id             String       @id @default(cuid())
+  elderId        String
+  elder          Elder        @relation(fields: [elderId], references: [id])
+  nurseId        String
+  nurse          User         @relation(fields: [nurseId], references: [id])
+  type           String
+  description    String
+  temperature    Float?
+  bloodPressure  String?
+  pulse          Int?
+  weight         Float?
+  mood           String?
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime     @default(now())
+}
+
+model BillingRecord {
+  id             String       @id @default(cuid())
+  elderId        String
+  elder          Elder        @relation(fields: [elderId], references: [id])
+  month          String
+  baseFee        Float        @default(0)
+  careFee        Float        @default(0)
+  medicineFee    Float        @default(0)
+  otherFee       Float        @default(0)
+  total          Float        @default(0)
+  status         String       @default("UNPAID")
+  paidAt         DateTime?
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime     @default(now())
+}
+
+model StaffMember {
+  id             String       @id @default(cuid())
+  userId         String       @unique
+  user           User         @relation(fields: [userId], references: [id])
+  position       String
+  department     String
+  joinDate       DateTime     @default(now())
+  salary         Float?
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+}
+
+model Investment {
+  id             String       @id @default(cuid())
+  investorId     String
+  investor       User         @relation(fields: [investorId], references: [id])
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  amount         Float
+  sharePercent   Float
+  productType    String       @default("A")
+  monthlyReturn  Float        @default(0)
+  status         String       @default("ACTIVE")
+  startDate      DateTime     @default(now())
+  returns        InvestReturn[]
+}
+
+model InvestReturn {
+  id           String     @id @default(cuid())
+  investmentId String
+  investment   Investment @relation(fields: [investmentId], references: [id])
+  month        String
+  amount       Float
+  status       String     @default("PENDING")
+  paidAt       DateTime?
+  createdAt    DateTime   @default(now())
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  fromUserId String
+  fromUser   User     @relation("SentMessages", fields: [fromUserId], references: [id])
+  toUserId   String
+  toUser     User     @relation("ReceivedMessages", fields: [toUserId], references: [id])
+  content    String
+  read       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  content   String
+  type      String   @default("INFO")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// ── 供应链管理 ────────────────────────────────────────────────
+
+model Supplier {
+  id             String          @id @default(cuid())
+  name           String
+  category       String          // FOOD / MEDICINE / EQUIPMENT / CONSUMABLE / OTHER
+  contactName    String?
+  contactPhone   String?
+  contactEmail   String?
+  address        String?
+  rating         Int             @default(3)  // 1-5星
+  status         String          @default("ACTIVE")
+  notes          String?
+  organizationId String
+  organization   Organization    @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime        @default(now())
+  purchaseOrders PurchaseOrder[]
+}
+
+model PurchaseOrder {
+  id             String              @id @default(cuid())
+  orderNo        String              @unique
+  supplierId     String
+  supplier       Supplier            @relation(fields: [supplierId], references: [id])
+  organizationId String
+  organization   Organization        @relation(fields: [organizationId], references: [id])
+  status         String              @default("PENDING")  // PENDING / APPROVED / DELIVERED / CANCELLED
+  totalAmount    Float               @default(0)
+  orderDate      DateTime            @default(now())
+  expectedDate   DateTime?
+  deliveredDate  DateTime?
+  notes          String?
+  items          PurchaseOrderItem[]
+  createdAt      DateTime            @default(now())
+}
+
+model PurchaseOrderItem {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  itemName        String
+  unit            String
+  quantity        Float
+  unitPrice       Float
+  totalPrice      Float
+}
+
+// ── 客户数据库（意向客户 / CRM） ─────────────────────────────
+
+model Customer {
+  id             String    @id @default(cuid())
+  name           String
+  phone          String?
+  email          String?
+  gender         String?
+  age            Int?
+  source         String?   // 渠道来源: REFERRAL / WALK_IN / ONLINE / HOSPITAL / GOV
+  status         String    @default("LEAD")   // LEAD / VISITING / NEGOTIATING / SIGNED / LOST
+  elderName      String?   // 拟入住老人姓名
+  elderAge       Int?
+  careNeed       String?   // A / B / C
+  budget         String?   // 预算区间
+  visitDate      DateTime?
+  followUpDate   DateTime?
+  assignedTo     String?   // 跟进人员姓名
+  notes          String?
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
