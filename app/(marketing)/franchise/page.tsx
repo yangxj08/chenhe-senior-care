@@ -32,70 +32,69 @@ const investmentHighlights = [
   },
   {
     icon: DollarSign,
-    title: "清晰财务回报",
-    desc: "经过验证的盈利模型，单店18-24个月回收初始投资，成熟期年营收360万元以上，财务回报透明可预期。",
-    stat: "18-24月",
-    statLabel: "投资回收期",
+    title: "成熟运营体系",
+    desc: "经过样板机构验证的标准化运营模型，从成本控制到入住率提升均有可复制的方法论。具体经营成果取决于当地市场与实际运营，详情可实地考察。",
+    stat: "标准化",
+    statLabel: "可复制模型",
   },
 ];
 
+// 合规说明：本页仅介绍合作模式，不构成任何投资要约或收益承诺。
+// 具体合作条款、出资方式与收益分配均以正式签署的协议为准，需经一对一洽谈。
 const products = [
   {
     id: "product-a",
-    name: "产品A",
-    subtitle: "轻资产合伙人计划",
-    minInvestment: "10万",
-    highlight: "年化12-15%",
+    name: "模式一",
+    subtitle: "参股合作伙伴",
+    minInvestment: "面谈",
+    highlight: "共担共享",
     color: "#2E75B6",
     bgGradient: "linear-gradient(135deg, #2E75B6, #3d8fd4)",
-    tag: "门槛低",
+    tag: "参与经营",
     description:
-      "适合希望参与养老产业但暂无条件直接运营机构的投资者。以资金合伙人方式参与郴和养老直营机构运营，享受稳定年化收益。",
+      "以出资方式参与直营机构的经营，共担经营风险、共享经营成果。具体出资比例与收益分配方式以双方正式签署的合作协议为准，不设固定收益承诺。",
     features: [
-      "最低投资门槛：10万元",
-      "年化综合收益：12%-15%",
-      "投资期限：1年/2年/3年可选",
-      "每季度分红一次",
-      "资金安全有合同保障",
-      "可参与实地考察",
-      "享受优先购买高级产品权益",
+      "以股权 / 合伙形式参与机构经营",
+      "收益与机构实际经营成果挂钩",
+      "可参与实地考察与经营决策沟通",
+      "面向符合条件的合格投资者定向洽谈",
+      "资金按协议进入监管账户，专款专用",
+      "定期获得经营情况披露",
     ],
-    suitable: "理财型投资者 / 个人 / 家庭",
+    suitable: "认可养老赛道的合格投资者",
   },
   {
     id: "product-b",
-    name: "产品B",
-    subtitle: "战略加盟运营计划",
-    minInvestment: "100万",
-    highlight: "IRR 28%",
+    name: "模式二",
+    subtitle: "品牌加盟运营",
+    minInvestment: "面谈",
+    highlight: "自主经营",
     color: "#E8A838",
     bgGradient: "linear-gradient(135deg, #E8A838, #f0b84a)",
-    tag: "回报高",
+    tag: "独立运营",
     description:
-      "以品牌加盟方式独立运营郴和养老连锁机构，总部提供完整运营支持。适合有场地资源或资金实力的战略合作伙伴，享受品牌溢价与经营主动权。",
+      "以品牌加盟方式独立运营郴和养老连锁机构，由加盟方作为经营主体自主运营、自负盈亏，总部提供品牌授权与全程运营支持。",
     features: [
-      "最低投资规模：100万元",
-      "内部收益率（IRR）：28%",
-      "18-24个月回收初始投资",
-      "机构运营主体由加盟商控制",
-      "5年独家区域保护（地级市级别）",
-      "全套SaaS系统免费使用",
-      "总部派驻督导团队常驻6个月",
-      "享受总部集采价节省成本20%+",
+      "机构运营主体由加盟方独立控制",
+      "区域独家保护（地级市级别）",
+      "全套 SaaS 管理系统使用授权",
+      "总部派驻督导团队协助开业",
+      "享受总部集中采购的成本优势",
+      "经营成果取决于实际运营情况",
     ],
-    suitable: "有场地资源者 / 企业投资者 / 医疗机构",
+    suitable: "有场地资源者 / 企业 / 医疗机构",
   },
 ];
 
 const financialTable = [
-  { item: "初始投资（装修+设备+运营资金）", productA: "10万起", productB: "100-300万" },
-  { item: "预期年化收益 / IRR", productA: "12%-15%", productB: "28%" },
-  { item: "投资回收期", productA: "合同到期还本", productB: "18-24个月" },
-  { item: "单店年营收（成熟期50床）", productA: "按份额分配", productB: "360万+" },
-  { item: "净利润率（成熟期）", productA: "按合同比例", productB: "约25%-30%" },
-  { item: "月均每床收入", productA: "不适用", productB: "约6,000元" },
-  { item: "运营成本占比", productA: "不适用", productB: "约70%-75%" },
-  { item: "品牌溢价（vs 行业均值）", productA: "享受", productB: "+30%" },
+  { item: "参与方式", productA: "出资参股经营", productB: "品牌加盟自主运营" },
+  { item: "经营主体", productA: "直营机构（共担风险）", productB: "加盟方独立运营" },
+  { item: "收益来源", productA: "机构经营成果分配", productB: "自主经营利润" },
+  { item: "收益是否固定", productA: "否，与经营挂钩", productB: "否，自负盈亏" },
+  { item: "区域保护", productA: "不适用", productB: "地级市5年独家" },
+  { item: "总部支持", productA: "经营披露", productB: "全程督导 + 系统" },
+  { item: "适合人群", productA: "合格投资者", productB: "有场地/经营能力者" },
+  { item: "合作门槛", productA: "一对一面谈确定", productB: "一对一面谈确定" },
 ];
 
 const franchiseSteps = [
@@ -141,8 +140,8 @@ const faqs = [
     a: "加盟商可自备场地，也可由总部协助选址。我们有专业选址评估模型，对建筑面积、周边老龄人口密度、竞争环境等关键指标逐一评估，确保选址具备盈利基础，减少投资风险。",
   },
   {
-    q: "产品A（10万）的资金安全如何保障？",
-    a: "产品A投资合同由律师见证，资金进入郴和养老科技有限公司专项账户，用于直营机构运营，每季度出具经第三方审计的财务报告，收益按合同约定时间足额支付。",
+    q: "参股合作的资金如何管理？",
+    a: "合作协议由专业律师起草见证，出资款进入受监管的专项账户、专款专用于机构经营，并定期向合作方披露经营情况。需特别说明：参股合作属于经营性投资，收益与机构实际经营成果挂钩，存在经营风险，不设固定收益承诺，请理性评估后参与。",
   },
   {
     q: "加盟区域是否有保护政策？",
@@ -254,7 +253,7 @@ function ApplyForm() {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">
-          投资意向 <span className="text-red-500">*</span>
+          合作意向 <span className="text-red-500">*</span>
         </label>
         <select
           name="investment"
@@ -264,12 +263,11 @@ function ApplyForm() {
           className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-[#2E75B6] focus:ring-1 focus:ring-[#2E75B6] transition-colors bg-white"
         >
           <option value="" disabled>
-            请选择投资意向
+            请选择合作意向
           </option>
-          <option value="product-a-10">产品A — 10万合伙人（年化12-15%）</option>
-          <option value="product-a-50">产品A — 50万合伙人（年化13-15%）</option>
-          <option value="product-b-100">产品B — 100万战略加盟（IRR 28%）</option>
-          <option value="product-b-200">产品B — 200万+战略加盟（IRR 28%）</option>
+          <option value="equity">模式一 — 参股合作（参与经营）</option>
+          <option value="franchise">模式二 — 品牌加盟（自主运营）</option>
+          <option value="venue">我有场地资源，想了解合作</option>
           <option value="other">其他 / 暂未确定</option>
         </select>
       </div>
@@ -294,12 +292,17 @@ function ApplyForm() {
         className="w-full py-4 rounded-xl font-bold text-white text-base transition-all hover:opacity-90 hover:shadow-lg disabled:opacity-60"
         style={{ backgroundColor: "#E8A838" }}
       >
-        {loading ? "提交中..." : "立即提交申请"}
+        {loading ? "提交中..." : "预约一对一洽谈"}
       </button>
 
       <p className="text-xs text-gray-400 text-center">
-        提交即表示您同意我们的隐私政策。您的信息仅用于招商联系，不会泄露给第三方。
+        提交即表示您同意我们的隐私政策。您的信息仅用于合作联系，不会泄露给第三方。
       </p>
+      <div className="rounded-xl bg-amber-50 border border-amber-200 px-4 py-3">
+        <p className="text-[11px] leading-relaxed text-amber-700">
+          <strong>风险提示：</strong>本页面所述合作模式属于经营性合作，相关收益与机构实际经营成果挂钩，存在经营风险，不构成任何固定收益承诺或投资要约。参股合作仅面向符合法律规定的合格投资者，具体条款以双方正式签署的协议为准。请您在充分了解风险后审慎决策。
+        </p>
+      </div>
     </form>
   );
 }
@@ -333,8 +336,8 @@ export default function FranchisePage() {
             <span style={{ color: "#E8A838" }}>共享银发经济红利</span>
           </h1>
           <p className="text-blue-100 text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-            两种灵活合作模式，10万元起可参与，最高IRR达28%。
-            经过验证的盈利模型，全程扶持体系，帮您稳健布局中国最确定的长期赛道。
+            参股合作与品牌加盟两种模式，与认可养老赛道的合作伙伴携手，
+            以成熟的运营体系和全程扶持，共同布局中国银发经济长期赛道。
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
@@ -342,7 +345,7 @@ export default function FranchisePage() {
               className="px-8 py-4 rounded-xl font-bold text-white transition-all hover:opacity-90 hover:shadow-xl"
               style={{ backgroundColor: "#E8A838" }}
             >
-              立即申请名额
+              预约一对一洽谈
             </a>
             <a
               href="#products"
@@ -365,7 +368,7 @@ export default function FranchisePage() {
               为什么选择郴和养老
             </span>
             <h2 className="text-3xl font-bold text-gray-900 mt-2">
-              4大投资亮点
+              4大合作优势
             </h2>
           </div>
 

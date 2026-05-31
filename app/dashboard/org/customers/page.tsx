@@ -364,14 +364,18 @@ export default async function CustomersPage({
                         {/* 操作 */}
                         <td className="px-4 py-4">
                           <div className="flex items-center justify-end gap-1.5">
-                            <Button variant="ghost" size="sm" className="h-8 px-2.5 text-xs">
-                              <Pencil className="h-3.5 w-3.5 mr-1" />
-                              编辑
-                            </Button>
-                            <Button variant="outline" size="sm" className="h-8 px-2.5 text-xs">
-                              <PlusCircle className="h-3.5 w-3.5 mr-1" />
-                              跟进记录
-                            </Button>
+                            <Link href={`/dashboard/org/customers/${customer.id}/edit`}>
+                              <Button variant="ghost" size="sm" className="h-8 px-2.5 text-xs">
+                                <Pencil className="h-3.5 w-3.5 mr-1" />
+                                编辑
+                              </Button>
+                            </Link>
+                            <Link href={`/dashboard/org/customers/${customer.id}/edit?focus=followup`}>
+                              <Button variant="outline" size="sm" className="h-8 px-2.5 text-xs">
+                                <PlusCircle className="h-3.5 w-3.5 mr-1" />
+                                跟进记录
+                              </Button>
+                            </Link>
                           </div>
                         </td>
                       </tr>
