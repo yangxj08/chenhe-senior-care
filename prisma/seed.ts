@@ -11,6 +11,10 @@ const adapter = new PrismaNeon(pool)
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
+  // 安全防护：禁止在生产环境运行带 admin123 弱密码的种子脚本
+  if (process.env.NODE_ENV === 'production' && !process.env.ALLOW_PROD_SEED) {
+    throw new Error('拒绝在生产环境运行种子脚本。如确需运行请设置 ALLOW_PROD_SEED=1')
+  }
   console.log('开始初始化数据库...')
 
   // 清空现有数据（按外键依赖倒序删除）

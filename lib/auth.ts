@@ -3,6 +3,14 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from '@/lib/db'
 import bcrypt from 'bcryptjs'
 
+// Fail closed: never run without a configured secret
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error('NEXTAUTH_SECRET 环境变量未设置，拒绝启动')
+}
+
+// 用于在用户不存在时也执行一次 bcrypt 比对，消除时间侧信道
+const DUMMY_HASH = '$2a$10$CwTycUXWue0Thq9StjUM0uJ8DvElVjQU7vFkN7nGiM0lLgGqMUWZ6'
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -21,14 +29,15 @@ export const authOptions: NextAuthOptions = {
           include: { organization: true },
         })
 
-        if (!user) {
-          throw new Error('用户不存在')
-        }
+        // 始终执行一次 bcrypt 比对（用户不存在时对 dummy hash 比对），
+        // 防止用户枚举与时间侧信道攻击；统一返回模糊错误信息
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          user?.password ?? DUMMY_HASH
+        )
 
-        const isPasswordValid = await bcrypt.compare(credentials.password, user.password)
-
-        if (!isPasswordValid) {
-          throw new Error('密码错误')
+        if (!user || !isPasswordValid) {
+          throw new Error('邮箱或密码错误')
         }
 
         return {

@@ -23,6 +23,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   const orgId = (session.user as any).organizationId
   const body = await req.json()
-  const supplier = await prisma.supplier.create({ data: { ...body, organizationId: orgId } })
+
+  if (!body.name || typeof body.name !== 'string') {
+    return NextResponse.json({ error: '供应商名称为必填项' }, { status: 400 })
+  }
+  const validCategories = ['FOOD', 'MEDICINE', 'EQUIPMENT', 'CONSUMABLE', 'OTHER']
+  if (body.category && !validCategories.includes(body.category)) {
+    return NextResponse.json({ error: '无效的供应商分类' }, { status: 400 })
+  }
+
+  const supplier = await prisma.supplier.create({
+    data: {
+      name: String(body.name),
+      category: body.category || 'OTHER',
+      contactName: body.contactName ? String(body.contactName) : null,
+      contactPhone: body.contactPhone ? String(body.contactPhone) : null,
+      contactEmail: body.contactEmail ? String(body.contactEmail) : null,
+      address: body.address ? String(body.address) : null,
+      rating: body.rating ? Math.min(5, Math.max(1, Number(body.rating))) : 3,
+      status: body.status === 'INACTIVE' ? 'INACTIVE' : 'ACTIVE',
+      notes: body.notes ? String(body.notes) : null,
+      organizationId: orgId,
+    },
+  })
   return NextResponse.json(supplier, { status: 201 })
 }
