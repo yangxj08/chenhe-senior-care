@@ -58,8 +58,15 @@ async function main() {
 
   console.log('机构创建完成:', headquartersOrg.name, jiaheeOrg.name)
 
-  // 密码加密
-  const hashedPassword = await bcrypt.hash('admin123', 10)
+  // 密码：从环境变量读取，未设置时生成随机密码（避免硬编码弱密码）
+  const seedPassword =
+    process.env.SEED_PASSWORD ||
+    require('crypto').randomBytes(12).toString('base64').replace(/[/+=]/g, '')
+  if (!process.env.SEED_PASSWORD) {
+    console.log(`⚠️  未设置 SEED_PASSWORD，本次随机生成的登录密码为: ${seedPassword}`)
+    console.log('   （请记录此密码，所有种子账号均使用它）')
+  }
+  const hashedPassword = await bcrypt.hash(seedPassword, 10)
 
   // 超级管理员
   const superAdmin = await prisma.user.create({
@@ -595,12 +602,12 @@ async function main() {
 
   console.log('客户数据库创建完成')
   console.log('\n数据库初始化完成！')
-  console.log('\n测试账号：')
-  console.log('超级管理员: admin@chenhe.com / admin123')
-  console.log('机构管理员: orgadmin@jiahee.com / admin123')
-  console.log('护理人员: nurse@jiahee.com / admin123')
-  console.log('家属: family@example.com / admin123')
-  console.log('投资人: investor@example.com / admin123')
+  console.log('\n账号（密码为上方生成/SEED_PASSWORD 指定的值）：')
+  console.log('超级管理员: admin@chenhe.com')
+  console.log('机构管理员: orgadmin@jiahee.com')
+  console.log('护理人员: nurse@jiahee.com')
+  console.log('家属: family@example.com')
+  console.log('投资人: investor@example.com')
 }
 
 main()
