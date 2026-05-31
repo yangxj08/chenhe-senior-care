@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    name: Lint · Test · Build · Deadlinks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Unit tests (Jest)
+        run: npm test -- --ci --passWithNoTests
+
+      - name: Deadlink scan
+        run: node scripts/check-deadlinks.mjs
+
+      - name: Production build
+        run: npm run build
+        env:
+          # 构建期占位值——真实值由 Vercel 注入，这里仅供 build 通过
+          DATABASE_URL: postgresql://user:pass@localhost:5432/db
+          NEXTAUTH_SECRET: ci-build-placeholder-secret-value-32chars
+          NEXTAUTH_URL: http://localhost:3000

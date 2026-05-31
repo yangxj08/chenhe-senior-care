@@ -1,0 +1,44 @@
+name: Claude PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  # 自动审查：每次 PR 打开/更新时
+  auto-review:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            审查这个 PR。重点关注：
+            1. 安全问题（认证/授权缺失、多租户数据隔离、密钥泄露、注入）
+            2. 死链（指向不存在页面的 href）
+            3. 中文站合规（招商/理财类措辞是否触碰非法集资红线、广告法绝对化用语）
+            4. 正确性 bug 与可简化处
+            用中文留言，按严重程度分级。
+          claude_args: "--max-turns 6 --model claude-sonnet-4-5"
+
+  # 交互式：评论里 @claude 时触发
+  interactive:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--max-turns 10"
